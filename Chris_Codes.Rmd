@@ -33,8 +33,10 @@ plastics_version <-
             pet = sum(pet),
             pp = sum(pp),
             ps = sum(ps),
-            grand_total = sum(grand_total))
+            grand_total = sum(grand_total)) %>% 
+  filter(country != "NIGERIA")
 
+head (plastics_version)
 ```
 
 
