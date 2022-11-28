@@ -37,6 +37,9 @@ plastics_version <-
   filter(country != "NIGERIA")
 
 head (plastics_version)
+
+
+
 ```
 
 
