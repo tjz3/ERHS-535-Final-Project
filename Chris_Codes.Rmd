@@ -24,14 +24,22 @@ plastics_new <- plastics %>%
   select("country", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
          "grand_total")
 
+plastics_version <- 
+  plastics_new %>%
+  group_by(country) %>%
+  summarize(hdpe = sum(hdpe),
+            ldpe = sum(ldpe),
+            others = sum(o),
+            pet = sum(pet),
+            pp = sum(pp),
+            ps = sum(ps),
+            grand_total = sum(grand_total))
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+```{r Adding the shape file, echo=FALSE}
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
