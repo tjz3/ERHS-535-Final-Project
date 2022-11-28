@@ -40,6 +40,5 @@ plastics_version <-
 
 ```{r Adding the shape file, echo=FALSE}
 
-
 ```
 
