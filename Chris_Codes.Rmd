@@ -1,0 +1,49 @@
+---
+title: "Group Project Code"
+author: "Christian Sewor"
+date: "2022-11-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Packages
+library(tidyverse)
+library(fs)
+
+```
+
+
+
+```{r Cleaning data}
+plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv')
+
+
+plastics_new <- plastics %>% 
+  select("country", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
+         "grand_total")
+
+plastics_version <- 
+  plastics_new %>%
+  group_by(country) %>%
+  summarize(hdpe = sum(hdpe),
+            ldpe = sum(ldpe),
+            others = sum(o),
+            pet = sum(pet),
+            pp = sum(pp),
+            ps = sum(ps),
+            grand_total = sum(grand_total)) %>% 
+  filter(country != "NIGERIA")
+
+head (plastics_version)
+
+
+
+```
+
+
+```{r Adding the shape file, echo=FALSE}
+
+```
+
