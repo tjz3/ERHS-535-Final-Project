@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
+    theme: sandstone
 ---
 
 ```{r setup, include=FALSE}
@@ -16,7 +17,9 @@ Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah 
 -----------------------------------------------------------------------
 
 ### Chart A
-graphic of the world with distribution of total plastic counts
+leaflet of countries with distribution of total plastic counts
+
+  possible chart for each country when selecting, it's a popup (purrr stuff, make ggplot object essentially a list column for each country), think about this
 
 ```{r}
 
@@ -26,7 +29,9 @@ Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 ### Chart B
-interactive data table
+interactive data table 
+
+  think about adding sparklines (google "r dt sparklines"). have color coded pollutant types.
 
 ```{r}
 
