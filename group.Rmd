@@ -45,7 +45,7 @@ library('DT')
 library('plotly')
 datatable(plastics_version)
 
-datatable (plastics_version, colnames = c("country", "high_density_polyethylene", "low_density_polyethylene", "other_plastic", "Polyester_plastic", "Polypropylene", "Polystyrene", "pvc",
+datatable (plastics_version, colnames = c("Country", "High density polyethylene", "low_density_polyethylene", "other_plastic", "Polyester_plastic", "Polypropylene", "Polystyrene", "pvc",
          "grand_total"),
          extensions = "Scroller", style="bootstrap", class="compact", width="100%", options=list(deferRender=TRUE, scrollY=300, scroller=TRUE))
   
