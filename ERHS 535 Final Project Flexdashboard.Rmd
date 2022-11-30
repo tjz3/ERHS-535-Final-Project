@@ -1,34 +1,44 @@
 ---
-title: "ERHS 535 RMarkdown"
+title: "Plastic Pollution Around the World"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
+    theme: sandstone
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
 ```
+-----------------------------------------------------------------------
 
-Column {data-width=650}
+Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah
+
 -----------------------------------------------------------------------
 
 ### Chart A
+leaflet of countries with distribution of total plastic counts
+
+  possible chart for each country when selecting, it's a popup (purrr stuff, make ggplot object essentially a list column for each country), think about this
 
 ```{r}
 
 ```
 
-Column {data-width=350}
+Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 ### Chart B
+interactive data table 
+
+  think about adding sparklines (google "r dt sparklines"). have color coded pollutant types.
 
 ```{r}
 
 ```
 
 ### Chart C
+bar chart ranking of one country's pollutants
 
 ```{r}
 
