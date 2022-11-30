@@ -6,25 +6,49 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv')
+
+
+plastics_new <- plastics %>% 
+  select("country", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
+         "grand_total")
+
+plastics_version <- 
+  plastics_new %>%
+  group_by(country) %>%
+  summarize(hdpe = sum(hdpe),
+            ldpe = sum(ldpe),
+            others = sum(o),
+            pet = sum(pet),
+            pp = sum(pp),
+            ps = sum(ps),
+            grand_total = sum(grand_total)) %>% 
+  filter(country != "NIGERIA")
+
+head (plastics_version)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r}
+library(dplyr)
+plastics_version <- plastics_version %>% 
+  rename ('high_density_polyethylene' = hdpe,
+         'low_density_polyethylene' = ldpe,
+         'polyester_plastic' = pet,
+         'polypropylene' = pp,
+         'polystyrene' = ps,
+         'other_plastic'= others,
+         'total'= grand_total)
 
-```{r cars}
-summary(cars)
+library('DT')
+library('plotly')
+datatable(plastics_version)
+
+datatable (plastics_version, colnames = c("country", "high_density_polyethylene", "low_density_polyethylene", "other_plastic", "Polyester_plastic", "Polypropylene", "Polystyrene", "pvc",
+         "grand_total"),
+         extensions = "Scroller", style="bootstrap", class="compact", width="100%", options=list(deferRender=TRUE, scrollY=300, scroller=TRUE))
+  
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
