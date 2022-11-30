@@ -1,34 +1,39 @@
 ---
-title: "ERHS 535 RMarkdown"
+title: "Plastic Pollution Around the World"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    orientation: rows
     vertical_layout: fill
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
 ```
+-----------------------------------------------------------------------
 
-Column {data-width=650}
+Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah
+
 -----------------------------------------------------------------------
 
 ### Chart A
+graphic of the world with distribution of total plastic counts
 
 ```{r}
 
 ```
 
-Column {data-width=350}
+Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 ### Chart B
+interactive data table
 
 ```{r}
 
 ```
 
 ### Chart C
+bar chart ranking of one country's pollutants
 
 ```{r}
 
