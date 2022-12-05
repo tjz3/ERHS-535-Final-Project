@@ -16,10 +16,57 @@ Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah 
 
 -----------------------------------------------------------------------
 
-### Chart A
-leaflet of countries with distribution of total plastic counts
+Value Boxes {data-width = 200}
+-----------------------------------------------------------------------
 
-  possible chart for each country when selecting, it's a popup (purrr stuff, make ggplot object essentially a list column for each country), think about this
+### hdpe
+
+```{r}
+valueBox(1, caption = "hdpe", color = "red", icon = "fa-github")
+```
+
+### hdpe
+
+```{r}
+valueBox(2, caption = "idpe", color = "orange", icon = "fa-twitter")
+```
+
+### ldpe
+
+```{r}
+valueBox(3, caption = "others", color = "yellow", icon = "glyphicon-time")
+```
+
+### o
+
+```{r}
+valueBox(4, caption = "pet", color = "green", icon = "fa-facebook")
+```
+
+### pet
+
+```{r}
+valueBox(5, caption = "pp", color = "blue", icon = "fa-facebook")
+```
+
+### pp
+
+```{r}
+# TODO: why is there a linked value here?
+valueBox(6, caption = "ps", color = "indigo", icon = "fab fa-r-project")
+```
+
+### pvc
+
+```{r}
+valueBox(7, caption = "pvc", color = "violet", icon = "fa-facebook")
+```
+
+Row {data-width = 1000}
+-----------------------------------------------------------------------
+
+### Chart A
+leaflet of countries with popup of distribution
 
 ```{r}
 
@@ -29,16 +76,13 @@ Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
 ### Chart B
-interactive data table 
-
-  think about adding sparklines (google "r dt sparklines"). have color coded pollutant types.
-
+filled columns bar chart
 ```{r}
 
 ```
 
 ### Chart C
-bar chart ranking of one country's pollutants
+interactive data table 
 
 ```{r}
 
