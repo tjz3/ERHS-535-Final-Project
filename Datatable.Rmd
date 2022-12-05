@@ -23,10 +23,11 @@ plastics_version <-
   group_by(country) %>%
   summarize(hdpe = sum(hdpe),
             ldpe = sum(ldpe),
-            others = sum(o),
+              others = sum(o),
             pet = sum(pet),
             pp = sum(pp),
             ps = sum(ps),
+            pvc = sum(pvc),
             grand_total = sum(grand_total)) %>% 
   filter(country != "NIGERIA") %>%
   filter(country != "EMPTY")
@@ -44,17 +45,12 @@ plastics_version <- plastics_version %>%
          'Polyester plastic' = pet,
          'Polypropylene' = pp,
          'Polystyrene' = ps,
+         'Polyvinyl Chloride' = pvc,
          'Other plastic'= others,
          'Total'= grand_total)
 
 library('DT')
-library('plotly')
 datatable(plastics_version)
-
-datatable (plastics_version, colnames = c("Country", "High density polyethylene", "low_density_polyethylene", "other_plastic", "Polyester_plastic", "Polypropylene", "Polystyrene", "pvc",
-         "grand_total"),
-         extensions = "Scroller", style="bootstrap", class="compact", width="100%", options=list(deferRender=TRUE, scrollY=300, scroller=TRUE))
-  
 ```
 
 
