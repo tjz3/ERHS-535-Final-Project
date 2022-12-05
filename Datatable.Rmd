@@ -50,11 +50,7 @@ plastics_version <- plastics_version %>%
          'Total'= grand_total)
 
 library('DT')
-library('plotly')
 datatable(plastics_version)
-
-
-  
 ```
 
 
