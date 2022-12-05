@@ -12,77 +12,76 @@ library(flexdashboard)
 ```
 -----------------------------------------------------------------------
 
-Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah Blah blah blah
+Description of flexdashboard
 
 -----------------------------------------------------------------------
 
-Value Boxes {data-width = 200}
+Value Boxes {data-width = 1000}
 -----------------------------------------------------------------------
 
 ### hdpe
 
 ```{r}
-valueBox(1, caption = "hdpe", color = "red", icon = "fa-github")
+valueBox(5, caption = "High-Density Polyethlyene (HDPE)", color = "red", icon = "ion-cube")
+# ToDo: change colors and order based on rankings, possibly change colors
 ```
 
 ### hdpe
 
 ```{r}
-valueBox(2, caption = "idpe", color = "orange", icon = "fa-twitter")
+valueBox(3, caption = "Low-Density Polyethlyene (LDPE)", color = "orange", icon = "fa-twitter")
 ```
 
 ### ldpe
 
 ```{r}
-valueBox(3, caption = "others", color = "yellow", icon = "glyphicon-time")
+valueBox(1, caption = "Others", color = "yellow", icon = "glyphicon-time")
 ```
 
 ### o
 
 ```{r}
-valueBox(4, caption = "pet", color = "green", icon = "fa-facebook")
+valueBox(2, caption = "Polyethylene Terephthalate (PET)", color = "green", icon = "fa-facebook")
 ```
 
 ### pet
 
 ```{r}
-valueBox(5, caption = "pp", color = "blue", icon = "fa-facebook")
+valueBox(4, caption = "Polypropylene (PP)", color = "blue", icon = "fa-facebook")
 ```
 
 ### pp
 
 ```{r}
 # TODO: why is there a linked value here?
-valueBox(6, caption = "ps", color = "indigo", icon = "fab fa-r-project")
+valueBox(6, caption = "Polystyrene (PS)", color = "indigo", icon = "fab fa-r-project")
 ```
 
 ### pvc
 
 ```{r}
-valueBox(7, caption = "pvc", color = "violet", icon = "fa-facebook")
-```
-
-Row {data-width = 1000}
------------------------------------------------------------------------
-
-### Chart A
-leaflet of countries with popup of distribution
-
-```{r}
-
+valueBox(7, caption = "Polyvinyl Chloride (PVC)", color = "violet", icon = "fa-facebook")
 ```
 
 Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
-### Chart B
-filled columns bar chart
+### Plastic Polution Leaflet with Distribution Popups
+filler
+
 ```{r}
 
 ```
 
-### Chart C
-interactive data table 
+### Distribution of Plastic Types by Country
+filler
+
+```{r}
+
+```
+
+### Plastic Types by Country Data Table
+filler
 
 ```{r}
 
