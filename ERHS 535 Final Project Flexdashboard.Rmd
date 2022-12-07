@@ -1,15 +1,28 @@
 ---
 title: "Plastic Pollution Around the World"
-output: 
+output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
     theme: sandstone
+
+---
+
+<head>
+  <script src="https://kit.fontawesome.com/805d72eba7.js" crossorigin="anonymous"></script>
+</head>
+
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(fontawesome)
+library(shiny)
+library(htmltools)
+library(bslib)
+library(colorspace)
 ```
+
 -----------------------------------------------------------------------
 
 Description of flexdashboard
@@ -19,48 +32,51 @@ Description of flexdashboard
 Value Boxes {data-width = 1000}
 -----------------------------------------------------------------------
 
-### hdpe
-
-```{r}
-valueBox(5, caption = "High-Density Polyethlyene (HDPE)", color = "red", icon = "ion-cube")
-# ToDo: change colors and order based on rankings, possibly change colors
+```{r include = FALSE}
+rainbow_hcl(n = 7)
 ```
 
-### hdpe
-
-```{r}
-valueBox(3, caption = "Low-Density Polyethlyene (LDPE)", color = "orange", icon = "fa-twitter")
-```
-
-### ldpe
-
-```{r}
-valueBox(1, caption = "Others", color = "yellow", icon = "glyphicon-time")
-```
 
 ### o
 
 ```{r}
-valueBox(2, caption = "Polyethylene Terephthalate (PET)", color = "green", icon = "fa-facebook")
+valueBox(1, caption = "Others", color = "#E495A5", icon = "fa-compact-disc")
 ```
 
 ### pet
 
 ```{r}
-valueBox(4, caption = "Polypropylene (PP)", color = "blue", icon = "fa-facebook")
+valueBox(2, caption = "Polyethylene Terephthalate (PET)", color = "#CEA472", icon = "fa-bottle-water")
+```
+
+### ldpe
+
+```{r}
+valueBox(3, caption = "Low-Density Polyethlyene (LDPE)", color = "#9CB469", icon = "fa-bag-shopping")
 ```
 
 ### pp
 
 ```{r}
-# TODO: why is there a linked value here?
-valueBox(6, caption = "Polystyrene (PS)", color = "indigo", icon = "fab fa-r-project")
+valueBox(4, caption = "Polypropylene (PP)", color = "#56BD96", icon = "fa-suitcase-rolling")
+```
+
+### hdpe
+
+```{r}
+valueBox(5, caption = "High-Density Polyethlyene (HDPE)", color = "#46BAC8", icon = "fa-jug-detergent")
+```
+
+### ps
+
+```{r}
+valueBox(6, caption = "Polystyrene (PS)", color = "#99A9E2", icon = "fa-utensils")
 ```
 
 ### pvc
 
 ```{r}
-valueBox(7, caption = "Polyvinyl Chloride (PVC)", color = "violet", icon = "fa-facebook")
+valueBox(7, caption = "Polyvinyl Chloride (PVC)", color = "#D497D3", icon = "fa-sheet-plastic")
 ```
 
 Row {.tabset .tabset-fade}
