@@ -38,7 +38,7 @@ plastics <- readr::read_csv('~/ERHS-535-Final-Project/Final_Project/ERHS-535-Fin
 plastics_new <- plastics %>% 
   select("country","empty", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
          "grand_total")
-#Creating a new data frame which includes counts of plastic types and the total plasstic collected
+#Creating a new data frame which includes counts of plastic types and the total plastics collected
 plastics_version <- 
   plastics_new %>%
   group_by(country) %>%

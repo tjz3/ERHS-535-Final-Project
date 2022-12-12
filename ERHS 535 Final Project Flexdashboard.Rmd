@@ -23,6 +23,21 @@ library(bslib)
 library(colorspace)
 library(dplyr)
 library("DT")
+library(sf)
+library(viridis)
+library(leaflet)
+library(plotly)
+library(DT)
+library(ggthemes)
+library(maptools)
+library(rnaturalearth)
+library(sp)
+library(broom)
+library(cshapes)
+library(simplevis)
+library(palmerpenguins)
+library(scales)
+library(purrr)
 ```
 
 Description of flexdashboard
@@ -32,8 +47,34 @@ Description of flexdashboard
 ## Value Boxes {data-width = 1000}
 
 ```{r include = FALSE}
-# set up code
+# Reading and cleaning data
+
 plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv')
+plastics_new <- plastics %>% 
+  select("country","empty", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
+         "grand_total")
+
+# Creating a new data frame which includes counts of plastic types and the total plastics collected
+plastics_version <- 
+  plastics_new %>%
+  group_by(country) %>%
+  summarize(EMPTY = sum(empty),
+            HDPE = sum(hdpe),
+            LDPE = sum(ldpe),
+            OTHERS = sum(o),
+            PET = sum(pet),
+            PP = sum(pp),
+            PS = sum(ps),
+            PVC = sum(pvc),
+            grand_total = sum(grand_total),
+total = sum(EMPTY, HDPE, LDPE, OTHERS, PET, PP, PS, PVC, na.rm = TRUE)) %>% 
+  filter(country != c("NIGERIA")) %>% 
+  filter(country != c("ECUADOR")) %>% 
+  filter(country != c("EMPTY")) %>% 
+  pivot_longer(HDPE:PVC, names_to = "Plastic type",
+               values_to = "count")
+
+# Establishing color pallet
 rainbow_hcl(n = 7)
 ```
 
