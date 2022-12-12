@@ -1,0 +1,255 @@
+---
+title: "Group Project Code for Map and Barchart"
+author: "Christian Sewor"
+date: "2022-11-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Packages Needed
+library(tidyverse)
+library(sf)
+library(viridis)
+library(leaflet)
+library(plotly)
+library(DT)
+library(ggthemes)
+library(maptools)
+library(flexdashboard)
+library(rnaturalearth)
+library(sp)
+library(broom)
+library(cshapes)
+library(simplevis)
+library(dplyr)
+library(palmerpenguins)
+library(scales)
+library(purrr)
+library(colorspace)
+
+```
+
+
+
+```{r Reading and cleaning data, include = FALSE}
+plastics <- readr::read_csv('~/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Data/plastics.csv')
+plastics_new <- plastics %>% 
+  select("country","empty", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
+         "grand_total")
+#Creating a new data frame which includes counts of plastic types and the total plastics collected
+plastics_version <- 
+  plastics_new %>%
+  group_by(country) %>%
+  summarize(EMPTY = sum(empty),
+            HDPE = sum(hdpe),
+            LDPE = sum(ldpe),
+            OTHERS = sum(o),
+            PET = sum(pet),
+            PP = sum(pp),
+            PS = sum(ps),
+            PVC = sum(pvc),
+            grand_total = sum(grand_total),
+total = sum(EMPTY, HDPE, LDPE, OTHERS, PET, PP, PS, PVC, na.rm = TRUE)) %>% 
+  filter(country != c("NIGERIA")) %>% 
+  filter(country != c("ECUADOR")) %>% 
+  filter(country != c("EMPTY")) %>% 
+  pivot_longer(HDPE:PVC, names_to = "Plastic type",
+               values_to = "count")
+  
+```
+
+
+
+
+```{r Adding the shape file and merging it with plastics_dataframe, echo = FALSE, message = FALSE, warning=FALSE}
+# Downloading shape file for the world's countries
+spdf_world <- ne_download( scale = 110, type = 'countries')
+
+# Converting shape file into an sf file
+spdf_world <- as(spdf_world,"sf") %>% 
+  rename(country = "ADMIN" )
+
+# Merging world countries' shape file with plastics- data frame
+plastic_complete <- right_join(spdf_world,plastics_version, by = "country")
+
+```
+
+
+```{r Leaflet Plot, echo= = TRUE, eval=TRUE, message = FALSE, warning=FALSE, fig.height=10, fig.width=2}
+#Creating a new data frame from the converted from the merged data frame 
+plastic_complete_frame <- as.data.frame(plastic_complete) 
+
+#Generating bar chart which will be displayed as pop-ups for individual countries and exporting them as html files
+individual_plot<- plastic_complete_frame %>%
+   split(.$country=="Vietnam") %>%
+  map(plot_ly, x= ~ `Plastic type`, y=~count, type='bar') 
+
+
+#Creating an object for each countries' bar chart
+
+popup_Arg <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Argentina.html"></iframe>'
+
+popup_Arm <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Armenia.html"></iframe>'
+popup_Aus <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Australia.html"></iframe>'
+popup_Bang <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Bangladesh.html"></iframe>'
+popup_Ben <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Benin.html"></iframe>'
+popup_Bhut <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Bhutan.html"></iframe>'
+popup_Brz <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Brazil.html"></iframe>'
+popup_Bul <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Bulgaria.html"></iframe>'
+popup_Burki <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Burkina Faso.html"></iframe>'
+popup_Came <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Cameroon.html"></iframe>'
+popup_Can <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Canada.html"></iframe>'
+popup_Chil <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Chile.html"></iframe>'
+popup_Chin <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/China.html"></iframe>'
+popup_Col <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Colombia.html"></iframe>'
+popup_Cyp <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Cyprus.html"></iframe>'
+popup_Den <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Denmark.html"></iframe>'
+popup_Ec <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Ecuador.html"></iframe>'
+popup_Els <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/El Savador.html"></iframe>'
+popup_Fran <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/France.html"></iframe>'
+popup_Germ <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Germany.html"></iframe>'
+popup_Ghan <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Ghana.html"></iframe>'
+popup_Grec <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Greece.html"></iframe>'
+popup_Hon <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Honduras.html"></iframe>'
+popup_In <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/India.html"></iframe>'
+popup_Indo <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Indonesia.html"></iframe>'
+popup_Ire <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Ireland.html"></iframe>'
+popup_Ita <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Italy.html"></iframe>'
+popup_Jap <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Japan.html"></iframe>'
+popup_Ken <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Kenya.html"></iframe>'
+popup_Korea <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Korea.html"></iframe>'
+popup_Kuw <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Kuwait.html"></iframe>'
+popup_Lat <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Latvia.html"></iframe>'
+popup_Lith <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Lithuania.html"></iframe>'
+popup_Luxe <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Luxembourg.html"></iframe>'
+popup_Mal <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Malaysia.html"></iframe>'
+popup_Mexi <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Mexico.html"></iframe>'
+popup_Mont <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Montenegro.html"></iframe>'
+popup_Neth <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Netherlands.html"></iframe>'
+popup_Nige <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Nigeria.html"></iframe>'
+popup_Per <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Peru.html"></iframe>'
+popup_Phil <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Philippines.html"></iframe>'
+popup_Port<- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Portugal.html"></iframe>'
+popup_Roma <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Romania.html"></iframe>'
+popup_Rwan <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Rwanda.html"></iframe>'
+popup_Ser <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Serbia.html"></iframe>'
+popup_Slov <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Slovenia.html"></iframe>'
+popup_SouthA <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/South Africa.html"></iframe>'
+popup_Spa<- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Spain.html"></iframe>'
+popup_Srl <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Sri Lanka.html"></iframe>'
+popup_Swt <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Switzerland.html"></iframe>'
+popup_Taiw <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Taiwan_Republic of China(ROC).html"></iframe>'
+popup_Tanz <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Tanzania.html"></iframe>'
+popup_Tha <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Thailand.html"></iframe>'
+popup_Tog <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Togo.html"></iframe>'
+popup_Tun <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Tunisia.html"></iframe>'
+popup_Turk <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Turkey.html"></iframe>'
+popup_Ukr <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Ukraine.html"></iframe>'
+popup_UAE <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/United Arab Emirates.html"></iframe>'
+popup_UK <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/United Kingdom.html"></iframe>'
+popup_USA <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/United States of America.html"></iframe>'
+popup_Viet <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///Users/christiansewor/ERHS-535-Final-Project/Final_Project/ERHS-535-Final-Project/Plotly%20Graphs/Vietnam.html"></iframe>'
+
+
+#Generating leaftlet plot with popups
+map <- leaflet(plastic_complete) %>% 
+  addTiles() 
+  
+pal <- colorQuantile(palette = "viridis", domain = plastic_complete$total, n = 4)
+map_complete <- map %>%
+  addPolygons(stroke = FALSE, smoothFactor = 0.2, fillOpacity = 1,
+    color = ~pal(total)) %>%
+  addLegend("bottomright", pal = pal, values = ~total,
+    title = "Total plastics collected",
+    opacity = 1) %>% 
+  addCircleMarkers(data = plastic_complete,group = "country", popup = popup_Arg, lng = -64.173331 , lat = -33.501159) %>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Arm, lng= 44.800564, lat = 40.459077)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Aus, lng= 134.049720, lat = -24.129522)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Bang, lng= 89.684963, lat = 24.214956)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ben, lng= 2.352018, lat = 10.324775)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Bhut, lng= 90.040294, lat = 27.536685)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Brz, lng= -49.559450, lat = -12.098687)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Bul, lng= 25.157090, lat = 42.508785)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Burki, lng= -1.363880, lat = 12.673048)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Came, lng= 12.473488, lat = 4.585041)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Can, lng= -101.910700, lat = 60.324287)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Chil, lng= -72.318871, lat = -38.151771)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Col, lng= 73.174347, lat = 3.373111)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Cyp, lng= 33.084182, lat = 34.913329)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Den, lng= 9.018163, lat = 55.966965)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ec, lng= -78.188375, lat = -1.259076)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Els, lng= -88.890124, lat = 13.685371)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Fran, lng= 2.552275, lat = 46.696113)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Germ, lng= 9.678348, lat = 50.961733)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ghan, lng= -1.036941, lat = 7.717639)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Grec, lng= 21.725680, lat = 39.492763)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Hon, lng= -86.887604, lat = 14.794801)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_In, lng= 79.358105, lat = 22.686852)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Indo, lng= 101.892949, lat = -0.954404)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ire, lng= -7.798588, lat = 53.078726)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ita, lng= 11.076907, lat = 44.732482)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Jap, lng= 138.442170, lat = 36.142538)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ken, lng= 37.907632, lat = 0.549043)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Korea, lng= 128.1295, lat = 36.38492)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Kuw, lng= 47.313999, lat = 29.413628)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Lat, lng= 25.458723, lat = 57.066872)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Lith, lng= 24.089932, lat = 55.103703)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Luxe, lng= 6.077620, lat = 49.733732)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Mal, lng= 113.837080, lat = 2.528667)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Mexi, lng= -102.289448, lat = 23.919988)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Mont, lng= 19.143727, lat = 42.803101)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Neth, lng= 5.611440, lat = 52.422211)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Nige, lng= 7.503220, lat = 9.439799)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Per, lng= -72.900160, lat = -12.976679)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Phil, lng= 122.465000, lat = 11.198000)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Port, lng= -8.271754, lat = 39.606675)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Roma, lng= 24.972624, lat = 45.733237)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Rwan, lng= 30.103894, lat = -1.897196)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ser, lng= 20.787989, lat = 44.18992)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Slov, lng= 14.915312, lat = 46.060760)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_SouthA, lng= 23.665734, lat = -29.708776)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Spa, lng= -3.464718, lat = 40.090953)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Srl, lng= 80.704823, lat = 7.581097)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Swt, lng= 7.463965, lat = 46.719114)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Taiw, lng= 120.868204, lat = 23.65241)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Tanz, lng= 34.95918, lat = -6.051866)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Tha, lng= 101.073198, lat = 46.696113)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Tog, lng= 1.058113, lat = 8.807220)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Tun, lng= 9.007881, lat = 33.687263)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Turk, lng= 34.508268, lat = 39.345388)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_UAE, lng= 54.547256, lat = 23.466285)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_UK, lng= -2.116346, lat = 54.402739)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Ukr, lng= 32.140865, lat = 49.724739)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_USA, lng= -97.482602, lat = 39.538479)%>%
+  addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Viet, lng= 105.387292, lat = 21.71542)
+
+#Saving newly created map with popus as an html widget file
+htmltools::save_html(map_complete, file = "map_complete.html")
+  
+```
+
+
+
+
+```{r Plotly plot, echo =FALSE, message = FALSE, warning=FALSE}
+
+#Generating barchart with plotly chart  
+
+rainbow_hcl(n=7)
+plastic_plot <- plastic_complete %>% 
+  drop_na(total) %>%
+  ggplot(mapping = aes(x = reorder(country, + total))) +
+  geom_bar(aes(weight= count, fill= `Plastic type`))+
+  scale_fill_manual(values= c("OTHERS" = "#E495A5", "PET" = "#CEA472", "LDPE" = "#9CB469", "PP" = "#56BD96", "HDPE" = "#46BAC8", "PS" = "#99A9E2", "PVC"= "#D497D3"))+
+  coord_flip()+
+  labs(x = "Country", 
+       y = "Count of Plastics collected")+
+  ggtitle(label = "Distribution of Plastic types by Country")+
+  theme_dark()+
+  theme(axis.text = element_text(size = 5))
+  
+ggplotly(plastic_plot)
+
+```
