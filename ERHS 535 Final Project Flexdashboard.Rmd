@@ -7,12 +7,9 @@ output:
     theme: flatly
 ---
 
-<head>
-
 ```{=html}
 <script src="https://kit.fontawesome.com/805d72eba7.js" crossorigin="anonymous"></script>
 ```
-</head>
 
 ------------------------------------------------------------------------
 
@@ -27,8 +24,6 @@ library(dplyr)
 library("DT")
 ```
 
-------------------------------------------------------------------------
-
 Description of flexdashboard
 
 ------------------------------------------------------------------------
@@ -41,43 +36,43 @@ plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/t
 rainbow_hcl(n = 7)
 ```
 
-### o
+### Others
 
 ```{r}
 valueBox(1, caption = "<b>Others<b>", color = "#E495A5", icon = "fa-compact-disc")
 ```
 
-### pet
+### PET
 
 ```{r}
 valueBox(2, caption = "Polyethylene Terephthalate <b>(PET)<b>", color = "#CEA472", icon = "fa-bottle-water")
 ```
 
-### ldpe
+### LDPE
 
 ```{r}
 valueBox(3, caption = "Low-Density Polyethlyene <b>(LDPE)<b>", color = "#9CB469", icon = "fa-bag-shopping")
 ```
 
-### pp
+### PP
 
 ```{r}
 valueBox(4, caption = "Polypropylene <b>(PP)<b>", color = "#56BD96", icon = "fa-suitcase-rolling")
 ```
 
-### hdpe
+### HDPE
 
 ```{r}
 valueBox(5, caption = "High-Density Polyethlyene <b>(HDPE)<b>", color = "#46BAC8", icon = "fa-jug-detergent")
 ```
 
-### ps
+### PS
 
 ```{r}
 valueBox(6, caption = "Polystyrene <b>(PS)<b>", color = "#99A9E2", icon = "fa-utensils")
 ```
 
-### pvc
+### PVC
 
 ```{r}
 valueBox(7, caption = "Polyvinyl Chloride <b>(PVC)<b>", color = "#D497D3", icon = "fa-sheet-plastic")
