@@ -4,15 +4,17 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     vertical_layout: fill
-    theme: sandstone
-
+    theme: flatly
 ---
 
 <head>
-  <script src="https://kit.fontawesome.com/805d72eba7.js" crossorigin="anonymous"></script>
+
+```{=html}
+<script src="https://kit.fontawesome.com/805d72eba7.js" crossorigin="anonymous"></script>
+```
 </head>
 
----
+------------------------------------------------------------------------
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
@@ -21,68 +23,70 @@ library(shiny)
 library(htmltools)
 library(bslib)
 library(colorspace)
+library(dplyr)
+library("DT")
 ```
 
------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Description of flexdashboard
 
------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-Value Boxes {data-width = 1000}
------------------------------------------------------------------------
+## Value Boxes {data-width = 1000}
 
 ```{r include = FALSE}
+# set up code
+plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv')
 rainbow_hcl(n = 7)
 ```
-
 
 ### o
 
 ```{r}
-valueBox(1, caption = "Others", color = "#E495A5", icon = "fa-compact-disc")
+valueBox(1, caption = "<b>Others<b>", color = "#E495A5", icon = "fa-compact-disc")
 ```
 
 ### pet
 
 ```{r}
-valueBox(2, caption = "Polyethylene Terephthalate (PET)", color = "#CEA472", icon = "fa-bottle-water")
+valueBox(2, caption = "Polyethylene Terephthalate <b>(PET)<b>", color = "#CEA472", icon = "fa-bottle-water")
 ```
 
 ### ldpe
 
 ```{r}
-valueBox(3, caption = "Low-Density Polyethlyene (LDPE)", color = "#9CB469", icon = "fa-bag-shopping")
+valueBox(3, caption = "Low-Density Polyethlyene <b>(LDPE)<b>", color = "#9CB469", icon = "fa-bag-shopping")
 ```
 
 ### pp
 
 ```{r}
-valueBox(4, caption = "Polypropylene (PP)", color = "#56BD96", icon = "fa-suitcase-rolling")
+valueBox(4, caption = "Polypropylene <b>(PP)<b>", color = "#56BD96", icon = "fa-suitcase-rolling")
 ```
 
 ### hdpe
 
 ```{r}
-valueBox(5, caption = "High-Density Polyethlyene (HDPE)", color = "#46BAC8", icon = "fa-jug-detergent")
+valueBox(5, caption = "High-Density Polyethlyene <b>(HDPE)<b>", color = "#46BAC8", icon = "fa-jug-detergent")
 ```
 
 ### ps
 
 ```{r}
-valueBox(6, caption = "Polystyrene (PS)", color = "#99A9E2", icon = "fa-utensils")
+valueBox(6, caption = "Polystyrene <b>(PS)<b>", color = "#99A9E2", icon = "fa-utensils")
 ```
 
 ### pvc
 
 ```{r}
-valueBox(7, caption = "Polyvinyl Chloride (PVC)", color = "#D497D3", icon = "fa-sheet-plastic")
+valueBox(7, caption = "Polyvinyl Chloride <b>(PVC)<b>", color = "#D497D3", icon = "fa-sheet-plastic")
 ```
 
-Row {.tabset .tabset-fade}
------------------------------------------------------------------------
+## Row {.tabset .tabset-fade}
 
 ### Plastic Polution Leaflet with Distribution Popups
+
 filler
 
 ```{r}
@@ -90,6 +94,7 @@ filler
 ```
 
 ### Distribution of Plastic Types by Country
+
 filler
 
 ```{r}
@@ -97,9 +102,35 @@ filler
 ```
 
 ### Plastic Types by Country Data Table
+
 filler
 
-```{r}
+```{r echo = FALSE}
+plastics_new <- plastics %>% 
+  select("country", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
+         "grand_total")
 
+plastics_version <- 
+  plastics_new %>%
+  group_by(country) %>%
+  summarize(hdpe = sum(hdpe),
+            ldpe = sum(ldpe),
+              others = sum(o),
+            pet = sum(pet),
+            pp = sum(pp),
+            ps = sum(ps),
+            pvc = sum(pvc),
+            grand_total = sum(grand_total)) %>% 
+  filter(country != "NIGERIA") %>%
+  filter(country != "EMPTY")
+plastics_version <- plastics_version %>% 
+  rename ('High density polyethylene' = hdpe,
+         'Low density polyethylene' = ldpe,
+         'Polyester plastic' = pet,
+         'Polypropylene' = pp,
+         'Polystyrene' = ps,
+         'Polyvinyl Chloride' = pvc,
+         'Other plastic'= others,
+         'Total'= grand_total)
+datatable(plastics_version)
 ```
-
