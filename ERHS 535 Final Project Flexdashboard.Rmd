@@ -32,10 +32,8 @@ library(ggthemes)
 library(maptools)
 library(rnaturalearth)
 library(sp)
-library(broom)
 library(cshapes)
 library(simplevis)
-library(palmerpenguins)
 library(scales)
 library(purrr)
 ```
@@ -48,8 +46,7 @@ Description of flexdashboard
 
 ```{r include = FALSE}
 # Reading and cleaning data
-
-plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv')
+plastics <- read.csv('plastics.csv')
 plastics_new <- plastics %>% 
   select("country","empty", "hdpe", "ldpe", "o", "pet", "pp", "ps", "pvc",
          "grand_total")
@@ -124,11 +121,9 @@ valueBox(7, caption = "Polyvinyl Chloride <b>(PVC)<b>", color = "#D497D3", icon 
 
 ## Row {.tabset .tabset-fade}
 
-### Plastic Polution Leaflet with Distribution Popups
+### Plastic Pollution Leaflet with Distribution Popups
 
-filler
-
-```{r echo = FALSE}
+```{r echo = FALSE, messages = FALSE, warning = FALSE}
 # Downloading shape file for the world's countries
 spdf_world <- ne_download( scale = 110, type = 'countries')
 
@@ -147,14 +142,70 @@ individual_plot<- plastic_complete_frame %>%
    split(.$country=="Vietnam") %>%
   map(plot_ly, x= ~ `Plastic type`, y=~count, type='bar') 
 
-#Creating an object for each countries' bar chart
+# Creating an object for each countries' bar chart
+popup_Arg <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Argentina.html"></iframe>'
+popup_Arm <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Armenia.html"></iframe>'
+popup_Aus <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Australia.html"></iframe>'
+popup_Bang <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Bangladesh.html"></iframe>'
+popup_Ben <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Benin.html"></iframe>'
+popup_Bhut <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Bhutan.html"></iframe>'
+popup_Brz <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Brazil.html"></iframe>'
+popup_Bul <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Bulgaria.html"></iframe>'
+popup_Burki <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Burkina Faso.html"></iframe>'
+popup_Came <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Cameroon.html"></iframe>'
+popup_Can <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Canada.html"></iframe>'
+popup_Chil <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Chile.html"></iframe>'
+popup_Chin <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/China.html"></iframe>'
+popup_Col <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Colombia.html"></iframe>'
+popup_Cyp <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Cyprus.html"></iframe>'
+popup_Den <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Denmark.html"></iframe>'
+popup_Ec <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Ecuador.html"></iframe>'
+popup_Els <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/El Savador.html"></iframe>'
+popup_Fran <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/France.html"></iframe>'
+popup_Germ <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Germany.html"></iframe>'
+popup_Ghan <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Ghana.html"></iframe>'
+popup_Grec <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Greece.html"></iframe>'
+popup_Hon <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Honduras.html"></iframe>'
+popup_In <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/India.html"></iframe>'
+popup_Indo <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Indonesia.html"></iframe>'
+popup_Ire <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Ireland.html"></iframe>'
+popup_Ita <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Italy.html"></iframe>'
+popup_Jap <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Japan.html"></iframe>'
+popup_Ken <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Kenya.html"></iframe>'
+popup_Korea <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Korea.html"></iframe>'
+popup_Kuw <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Kuwait.html"></iframe>'
+popup_Lat <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Latvia.html"></iframe>'
+popup_Lith <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Lithuania.html"></iframe>'
+popup_Luxe <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Luxembourg.html"></iframe>'
+popup_Mal <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Malaysia.html"></iframe>'
+popup_Mexi <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Mexico.html"></iframe>'
+popup_Mont <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Montenegro.html"></iframe>'
+popup_Neth <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Netherlands.html"></iframe>'
+popup_Nige <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Nigeria.html"></iframe>'
+popup_Per <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Peru.html"></iframe>'
+popup_Phil <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Philippines.html"></iframe>'
+popup_Port<- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Portugal.html"></iframe>'
+popup_Roma <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Romania.html"></iframe>'
+popup_Rwan <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Rwanda.html"></iframe>'
+popup_Ser <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Serbia.html"></iframe>'
+popup_Slov <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Slovenia.html"></iframe>'
+popup_SouthA <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/South Africa.html"></iframe>'
+popup_Spa<- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Spain.html"></iframe>'
+popup_Srl <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Sri Lanka.html"></iframe>'
+popup_Swt <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Switzerland.html"></iframe>'
+popup_Taiw <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Taiwan_Republic of China(ROC).html"></iframe>'
+popup_Tanz <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Tanzania.html"></iframe>'
+popup_Tha <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Thailand.html"></iframe>'
+popup_Tog <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Togo.html"></iframe>'
+popup_Tun <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Tunisia.html"></iframe>'
+popup_Turk <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Turkey.html"></iframe>'
+popup_Ukr <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Ukraine.html"></iframe>'
+popup_UAE <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/United Arab Emirates.html"></iframe>'
+popup_UK <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/United Kingdom.html"></iframe>'
+popup_USA <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/United States of America.html"></iframe>'
+popup_Viet <- '<iframe width="300" height="300" frameborder="0" scrolling="no" src="file:///C:/Users/tonys/Documents/School/CSU/R%20Programming%20for%20Researchers/ERHS%20535%20Final%20Project/maps%20and%20graphs/maps/Vietnam.html"></iframe>'
 
-# Fill
-# This
-# In
-# Later
-
-#Generating leaflet plot with popups
+# Generating leaflet plot with popups
 map <- leaflet(plastic_complete) %>% 
   addTiles() 
   
@@ -226,8 +277,11 @@ map_complete <- map %>%
   addCircleMarkers(data = plastic_complete, group = "country", popup = popup_USA, lng= -97.482602, lat = 39.538479)%>%
   addCircleMarkers(data = plastic_complete, group = "country", popup = popup_Viet, lng= 105.387292, lat = 21.71542)
 
-#Saving newly created map with popus as an html widget file
+# Saving newly created map with popus as an html widget file
 htmltools::save_html(map_complete, file = "map_complete.html")
+
+# Putting it in the dashboard
+includeHTML("map_complete.html")
 ```
 
 ### Distribution of Plastic Types by Country
