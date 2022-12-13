@@ -36,15 +36,7 @@ plastics_version <-
             total = sum(EMPTY, HDPE, LDPE, OTHERS, PET, PP, PS, PVC, na.rm = TRUE)) %>%
   filter(country != c("NIGERIA")) %>%
   filter(country != c("ECUADOR")) %>%
-  filter(country != c("EMPTY")) %>%
-  pivot_longer(HDPE:PVC, names_to = "Plastic type",
-               values_to = "count") %>% 
-  pivot_wider(names_from = "Plastic type",
-                      values_from = "count")
-```
-
-```{r}
-plastics_version <- plastics_version %>% 
+  filter(country != c("EMPTY"))  %>% 
   select("country","HDPE","LDPE","PET","OTHERS","PP","PS","PVC","total") %>% 
   rename ('High density polyethylene' = HDPE,
          'Low density polyethylene' = LDPE,
