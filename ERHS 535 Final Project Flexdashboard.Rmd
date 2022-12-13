@@ -281,7 +281,7 @@ map_complete <- map %>%
 htmltools::save_html(map_complete, file = "map_complete.html")
 
 # Putting it in the dashboard
-includeHTML("map_complete.html")
+map_complete
 ```
 
 ### Distribution of Plastic Types by Country
